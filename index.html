@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Checklist: Entrega de Equipamento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Calibri:400,700|Sacramento:400|Caveat:400|Handlee:400|Homemade+Apple:400|Allura:400&display=swap" rel="stylesheet">
+  <style>
+    html,body{background:#ececec;margin:0;padding:0;font-family:"Calibri",Arial,sans-serif;}
+    body{min-height:100vh;}
+    .word-container{background:#fff;max-width:820px;margin:10px auto 12px auto;border:1px solid #bbb;box-shadow:0 0 5px #bbb;padding:18px 22px 10px 22px;border-radius:2px;font-size:15px;color:#222;display:flex;flex-direction:column;}
+    .word-logo{display:block;width:75px;margin:0 auto 2px;}
+    .word-header{text-align:center;font-size:1.4em;font-weight:700;margin-bottom:18px;color:#17386b;letter-spacing:.5px;}
+    .word-fields-inline{display:flex;flex-wrap:wrap;gap:0 50px;margin-bottom:10px;align-items:flex-end;}
+    .inline-field-group{display:flex;align-items:center;gap:8px;}
+    .word-label{min-width:138px;font-weight:600;color:#17386b;margin-right:10px;}
+    .word-fields-inline .word-label{min-width:140px;margin:0 2px 0 0;}
+    .word-input,.word-table-input{background:transparent;border:none;border-bottom:1px solid #bbb;color:#222;font-size:1em;font-family:inherit;padding:1.5px 3px;outline:none;margin-bottom:1.5px;width:180px;transition:border .18s;}
+    .word-fields-inline .word-input{width:210px;min-width:100px;}
+    .word-input:focus,.word-table-input:focus{border-bottom:1.3px solid #17386b;background:#eaf1fb;}
+    .word-table{width:100%;border-collapse:collapse;margin-bottom:13px;font-size:15px;}
+    .word-table th,.word-table td{border:1px solid #bbb;padding:3px 7px;font-weight:400;}
+    .word-table th{background:#eaf1fb;color:#17386b;text-align:left;font-weight:bold;min-width:80px;}
+    .word-checklist-table{width:100%;border-collapse:collapse;font-size:15px;margin-bottom:20px;}
+    .word-checklist-table td{border:1px solid #bbb;padding:0;background:#fff;vertical-align:middle;font-size:1em;}
+    .word-check-row{display:flex;align-items:center;min-height:28px;padding:7px;font-size:1em;}
+    .word-checkbox{appearance:none;width:22px;height:22px;min-width:22px;border:2.2px solid #222;border-radius:4px;margin-right:11px;background:#fff;position:relative;cursor:pointer;vertical-align:middle;display:inline-block;transition:border-color .15s,background .15s;outline:none;flex-shrink:0;}
+    .word-checkbox:checked{background:#fff;border-color:#222;}
+    .word-checkbox:checked::after{content:"X";color:#222;font-weight:bold;font-size:1.2em;width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:absolute;left:0;top:0;font-family:"Calibri",Arial,sans-serif;pointer-events:none;line-height:22px;}
+    .word-checkbox:focus{box-shadow:0 0 2px #17386b;}
+    .word-check-num{font-weight:bold;color:#17386b;min-width:28px;text-align:right;margin-right:8px;font-size:1em;display:inline-block;}
+    .word-check-desc{display:inline-block;flex-grow:1;min-width:0;font-size:1em;color:#222;}
+    .word-important{margin:16px 0 10px 0;font-size:.98em;color:#a56400;font-weight:500;text-align:center;}
+    .signature-row-custom{display:flex;align-items:flex-end;justify-content:center;margin-top:36px;gap:36px;}
+    .custom-sig-label{color:#17386b;font-size:1.11em;font-weight:700;margin-top:4px;letter-spacing:.01em;text-align:center;}
+    .custom-sig-placeholder{min-width:230px;min-height:38px;border:none;border-bottom:1.5px solid #bbb;background:#f8f8f8;color:#17386b;font-size:var(--sig-font-size,2em);text-align:center;cursor:pointer;font-family:'Sacramento',cursive;transition:border-color .16s,font-size .18s;padding:5px 0 2px 0;display:inline-block;vertical-align:bottom;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.05em;max-width:100%;border-radius:0;}
+    .custom-sig-placeholder.signed{color:#222;cursor:pointer;}
+    .custom-sig-matricula{min-width:210px;min-height:38px;border:none;border-bottom:1.5px dashed #bbb;background:#f8f8f8;color:#222;font-size:1.2em;text-align:center;padding:5px 0 2px 0;display:inline-block;vertical-align:bottom;outline:none;font-family:inherit;pointer-events:none;border-radius:0;max-width:100%;}
+    .custom-sig-matricula:focus{background:#eaf1fb;}
+    .custom-sig-group{display:flex;flex-direction:column;align-items:center;flex:1 1 auto;}
+    @media (max-width:700px){
+      .word-container{padding:8px 3vw 9px 3vw;min-height:700px;}
+      .word-logo{display:none;}
+      .float-print-btn{right:12px;bottom:12px;}
+      .word-fields-inline{flex-direction:column;gap:0;}
+      .inline-field-group{margin-bottom:7px;}
+      .word-fields-inline .word-label{margin-bottom:2px;}
+      .signature-row-custom{flex-direction:column;gap:7px;}
+      .custom-sig-group{width:100%;}
+    }
+    @media print{
+      html,body{background:#fff !important;font-size:13px !important;}
+      .float-print-btn,.modal-bg{display:none !important;}
+      .word-container{margin:0 !important;max-width:100vw !important;box-shadow:none !important;border-radius:0 !important;border:none !important;padding:6mm 6mm 2mm 6mm !important;}
+      .word-header{font-size:1.15em !important;}
+      .word-fields-inline .word-label,.word-label{font-size:.98em !important;}
+      .word-table th,.word-table td{padding:2px 4px 1px 4px !important;}
+      .word-checklist-table td{padding:0 !important;}
+      .word-check-row{padding:2.5px 3.5px !important;font-size:.95em !important;}
+      .word-checkbox{width:17px;height:17px;min-width:17px;}
+      .word-check-num{min-width:23px;margin-right:6px;font-size:.97em;}
+      .custom-sig-placeholder{min-width:95px !important;min-height:22px !important;font-size:1.08em !important;}
+      .custom-sig-placeholder.signed{font-size:1.08em !important;}
+      .custom-sig-matricula{min-width:95px !important;min-height:22px !important;}
+      .custom-sig-label{font-size:.96em !important;}
+      .word-important{font-size:.93em !important;}
+      @page{size:A4 portrait;margin:0;}
+      html,body{width:210mm;height:297mm;overflow:hidden !important;}
+      header,footer{display:none !important;height:0 !important;}
+    }
+    .modal-bg{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(20,27,42,0.23);z-index:1002;display:flex;align-items:center;justify-content:center;animation:fadeinbg .17s;}
+    @keyframes fadeinbg{from{background:rgba(20,27,42,0);}to{background:rgba(20,27,42,0.23);}}
+    .modal{background:#fff;padding:30px 32px 22px 32px;border-radius:18px;min-width:350px;max-width:96vw;box-shadow:0 10px 40px #0003,0 2px 6px #0002;display:flex;flex-direction:column;align-items:center;gap:13px;}
+    .modal-title{font-size:1.25em;color:#17386b;font-weight:700;margin-bottom:3px;letter-spacing:.01em;text-align:center;}
+    .modal-input-row{width:100%;display:flex;gap:18px;align-items:flex-end;justify-content:center;margin-bottom:6px;}
+    .modal-input-row label{font-weight:600;color:#17386b;margin-bottom:3px;font-size:1em;text-align:left;display:block;}
+    .modal-signature-box,.modal-matricula-box{display:flex;flex-direction:column;align-items:flex-start;flex:1 1 0;min-width:160px;}
+    .modal-signature-box input,.modal-matricula-box input{width:100%;font-size:1.25em;padding:6px 8px;border:none;border-bottom:2px solid #dbe3ea;background:#f3f7fa;color:#17386b;border-radius:5px 5px 0 0;font-family:inherit;outline:none;margin-bottom:0;margin-top:3px;min-width:120px;max-width:340px;}
+    .modal-signature-box input:focus,.modal-matricula-box input:focus{border-bottom:2px solid #17386b;background:#eaf1fb;}
+    .modal-signature-box input{font-family:var(--modal-font,'Sacramento',cursive);font-size:var(--modal-font-size,2em);}
+    .modal-matricula-box input{font-size:1.12em;}
+    .modal-options-row{display:flex;align-items:center;gap:10px;width:100%;margin:5px 0 7px 0;}
+    .modal-options-row label{font-weight:500;color:#17386b;font-size:1em;margin-right:2px;}
+    .modal select,.modal .font-size-select{width:56px;padding:4px 6px;font-size:1.05em;border-radius:3px;background:#f5f5f5;color:#17386b;border:1px solid #bbb;}
+    .modal select#modalFontSelect{width:170px;}
+    .modal .font-preview{font-size:1.35em;min-height:1.4em;border-radius:5px;border-bottom:1.5px solid #eee;margin:10px 0 12px 0;color:#222;background:#f8f8f8;text-align:center;width:100%;max-width:340px;cursor:pointer;padding:7px 0;font-family:'Sacramento',cursive;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .modal .btn-row{display:flex;gap:14px;margin-top:8px;justify-content:center;width:100%;}
+    .modal .modal-btn{background:#17386b;color:#fff;border:none;border-radius:7px;padding:8px 32px;font-size:1.11em;font-weight:700;cursor:pointer;transition:background .14s;color .14s;box-shadow:0 1px 8px #17386b15;}
+    .modal .modal-btn.cancel{background:#f2f2f2;color:#17386b;border:1px solid #bbb;font-weight:400;}
+    .modal .modal-btn:hover{background:#376edb;color:#fff;}
+    .font-Sacramento{font-family:'Sacramento',cursive;}
+    .font-Caveat{font-family:'Caveat',cursive;}
+    .font-Handlee{font-family:'Handlee',cursive;}
+    .font-HomemadeApple{font-family:'Homemade Apple',cursive;}
+    .font-Allura{font-family:'Allura',cursive;}
+    .float-print-btn{position:fixed;right:24px;bottom:24px;background:#17386b;border:none;border-radius:50%;width:54px;height:54px;box-shadow:0 2px 10px #17386b36;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1200;}
+    .float-print-btn svg{width:32px;height:32px;fill:#fff;}
+    .float-print-btn:active{background:#376edb;}
+  </style>
+</head>
+<body>
+  <div class="word-container" id="doc-content">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Eletrobras.png" alt="Eletrobras" class="word-logo" />
+    <div class="word-header">Entrega do Notebook e Kit</div>
+    <div class="word-fields-inline">
+      <div class="inline-field-group">
+        <div class="word-label">Nome do colaborador:</div>
+        <input type="text" class="word-input" id="nomeColaborador">
+      </div>
+      <div class="inline-field-group">
+        <div class="word-label">Matrícula:</div>
+        <input type="text" class="word-input" id="matricula" style="width:210px;">
+      </div>
+    </div>
+    <table class="word-table">
+      <tr>
+        <th>Notebook modelo</th>
+        <td><input class="word-table-input" id="notebook"></td>
+        <th>Fone</th>
+        <td><input class="word-table-input" id="fone"></td>
+      </tr>
+      <tr>
+        <th>Mouse</th>
+        <td><input class="word-table-input" id="mouse"></td>
+        <th>Teclado sem fio</th>
+        <td><input class="word-table-input" id="teclado"></td>
+      </tr>
+    </table>
+    <table class="word-checklist-table" id="checklistTable"><tbody></tbody></table>
+    <div class="word-important">
+      Importante anexar esse checklist e o termo de entrega no chamado.
+    </div>
+    <div class="signature-row-custom">
+      <div class="custom-sig-group">
+        <div id="sigPlaceholder" class="custom-sig-placeholder" tabindex="0"></div>
+        <span class="custom-sig-label">Técnico responsável</span>
+      </div>
+      <div class="custom-sig-group">
+        <input type="text" class="custom-sig-matricula" id="sigMatricula" readonly>
+        <span class="custom-sig-label">Matrícula</span>
+      </div>
+    </div>
+  </div>
+  <button class="float-print-btn" id="floatPrintBtn" title="Imprimir" type="button">
+    <svg viewBox="0 0 24 24"><path d="M17 3H7C5.9 3 5 3.9 5 5v4H6V5c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v4h1V5c0-1.1-.9-2-2-2zm3 6H4c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h1v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3h1c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2zm-3 12H7v-3h10v3zm3-5c0 .55-.45 1-1 1h-1v-2H5v2H4c-.55 0-1-.45-1-1v-6c0-.55.45-1 1-1h16c.55 0 1 .45 1 1v6z"/></svg>
+  </button>
+  <div id="signatureModal" class="modal-bg" style="display:none;">
+    <div class="modal">
+      <span class="modal-title">Assinatura Digital</span>
+      <div class="modal-input-row">
+        <div class="modal-signature-box">
+          <label for="modalSignatureText">Assinatura:</label>
+          <input type="text" id="modalSignatureText" maxlength="50" autocomplete="off">
+        </div>
+        <div class="modal-matricula-box">
+          <label for="modalMatriculaText">Matrícula:</label>
+          <input type="text" id="modalMatriculaText" maxlength="20" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-options-row">
+        <label for="modalFontSelect">Fonte:</label>
+        <select id="modalFontSelect">
+          <option value="'Sacramento', cursive" class="font-Sacramento">Sacramento</option>
+          <option value="'Caveat', cursive" class="font-Caveat">Caveat</option>
+          <option value="'Handlee', cursive" class="font-Handlee">Handlee</option>
+          <option value="'Homemade Apple', cursive" class="font-HomemadeApple">Homemade Apple</option>
+          <option value="'Allura', cursive" class="font-Allura">Allura</option>
+        </select>
+        <label for="modalFontSize" class="font-size-label">Tamanho:</label>
+        <select id="modalFontSize" class="font-size-select">
+          <option value="1.1em">1</option>
+          <option value="1.3em">2</option>
+          <option value="1.6em" selected>3</option>
+          <option value="2em">4</option>
+          <option value="2.5em">5</option>
+        </select>
+      </div>
+      <div id="modalFontPreview" class="font-preview font-Sacramento"></div>
+      <div class="btn-row">
+        <button class="modal-btn" id="modalSignBtn">Assinar</button>
+        <button class="modal-btn cancel" id="modalCancelBtn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Compact checklist render
+    const checklistItems = [
+      "Conectar-se à rede cabeada",
+      "Realizar primeiro login com o usuário",
+      "Orientar troca das senhas temporárias do usuário (Rede e Outlook)",
+      "Conectar EletroGiga com o login do usuário (apenas ELETROBRAS e Furnas)",
+      "Adicionar o usuário na rede Wi-Fi ELB Corp (caso se aplique)",
+      "Testar acesso à internet",
+      "Testar acesso ao https://eletrobras.sharepoint.com/",
+      "Verificar se os drivers estão instalados e atualizados, caso contrário, realizar a instalação.",
+      "Verificar se o Qualys está instalado, caso contrário, realizar a instalação.",
+      "Verificar se o Antivírus está instalado, caso contrário, realizar a instalação.",
+      "Verificar se o Zscaler está instalado, caso contrário, realizar a instalação.",
+      "Atualizar e testar o acesso ao Teams",
+      "Atualizar e testar o acesso ao Outlook",
+      "Atualizar e testar o acesso ao OneDrive",
+      "Testar acesso ao SAP (caso se aplique)",
+      "Testar o acesso às pastas compartilhadas (caso se aplique)",
+      "Verificar se as impressoras estão instaladas, caso contrário, instalar o Servidor de Impressão. Obs.: Localidades como Eletronorte/Eletrosul devem abrir chamado informando a impressora se cair em questão.",
+      "Verificar se o pacote MS Office 365 está logado com a conta institucional do usuário. Ex: usuario.sobrenome@eletrobras.com",
+      "Verificar com o usuário a necessidade de instalação de softwares e configurações básicas que necessitem de permisssão de administrador (NÃO DEVE SER LIBERADO O ACESSO ADM). Ex: Lightshot, Leitor de PDF etc."
+    ];
+    const checklistTable = document.getElementById('checklistTable').querySelector('tbody');
+    checklistItems.forEach((item, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>
+        <label class="word-check-row">
+          <input type="checkbox" class="word-checkbox" id="checklist-check-${idx}" tabindex="0">
+          <span class="word-check-num">${idx+1}.</span>
+          <span class="word-check-desc">${item}</span>
+        </label>
+      </td>`;
+      checklistTable.appendChild(tr);
+    });
+
+    // --- Signature Modal Logic ---
+    let signatureValue = "", signatureFont = "'Sacramento', cursive", signatureMatricula = "", signatureFontSize = "1.6em";
+    const sigPlaceholder = document.getElementById('sigPlaceholder'),
+      sigMatricula = document.getElementById('sigMatricula'),
+      signatureModal = document.getElementById('signatureModal'),
+      modalSignatureText = document.getElementById('modalSignatureText'),
+      modalMatriculaText = document.getElementById('modalMatriculaText'),
+      modalFontSelect = document.getElementById('modalFontSelect'),
+      modalFontPreview = document.getElementById('modalFontPreview'),
+      modalSignBtn = document.getElementById('modalSignBtn'),
+      modalCancelBtn = document.getElementById('modalCancelBtn'),
+      modalFontSize = document.getElementById('modalFontSize');
+
+    function applyModalFont() {
+      modalSignatureText.style.fontFamily = modalFontSelect.value;
+      modalFontPreview.style.fontFamily = modalFontSelect.value;
+      modalSignatureText.style.fontSize = modalFontSize.value;
+      modalFontPreview.style.fontSize = modalFontSize.value;
+      modalSignatureText.style.setProperty('--modal-font', modalFontSelect.value);
+      modalSignatureText.style.setProperty('--modal-font-size', modalFontSize.value);
+    }
+    function updateModalFontPreview() {
+      applyModalFont();
+      modalFontPreview.textContent = modalSignatureText.value || "Sua assinatura";
+      modalFontPreview.className = 'font-preview ' + modalFontSelect.selectedOptions[0].className;
+    }
+    function openSignatureModal() {
+      modalSignatureText.value = signatureValue || '';
+      modalMatriculaText.value = signatureMatricula || '';
+      modalFontSelect.value = signatureFont;
+      modalFontSize.value = signatureFontSize;
+      applyModalFont();
+      updateModalFontPreview();
+      signatureModal.style.display = 'flex';
+      setTimeout(()=>modalSignatureText.focus(),150);
+    }
+    function closeSignatureModal(){signatureModal.style.display='none';}
+    modalSignatureText.addEventListener('input', updateModalFontPreview);
+    modalFontSelect.addEventListener('change', updateModalFontPreview);
+    modalFontSize.addEventListener('change', updateModalFontPreview);
+    sigPlaceholder.addEventListener('click', openSignatureModal);
+    sigPlaceholder.addEventListener('keydown', e=>{
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();openSignatureModal();}
+    });
+    modalCancelBtn.addEventListener('click', closeSignatureModal);
+    modalSignBtn.addEventListener('click', function() {
+      const value = modalSignatureText.value.trim(), matriculaValue = modalMatriculaText.value.trim();
+      if(!value){modalSignatureText.focus();return;}
+      signatureValue = value;
+      signatureFont = modalFontSelect.value;
+      signatureMatricula = matriculaValue;
+      signatureFontSize = modalFontSize.value;
+      sigPlaceholder.textContent = signatureValue;
+      sigPlaceholder.style.fontFamily = signatureFont;
+      sigPlaceholder.classList.add("signed");
+      sigPlaceholder.style.setProperty('--sig-font-size', signatureFontSize);
+      sigMatricula.value = signatureMatricula;
+      closeSignatureModal();
+    });
+    modalSignatureText.addEventListener('keyup',e=>{
+      if(e.key==="Enter") modalSignBtn.click();
+    });
+
+    // Corrige/improva botão de impressão
+    document.getElementById('floatPrintBtn').onclick = function() {
+      if(!signatureValue){
+        sigPlaceholder.textContent = "";
+        sigPlaceholder.classList.remove("signed");
+        sigPlaceholder.style.fontFamily = "'Sacramento', cursive";
+        sigPlaceholder.style.setProperty('--sig-font-size','1.6em');
+        sigMatricula.value = "";
+      }
+      setTimeout(()=>window.print(),30);
+    };
+
+    // Reset assinatura ao carregar
+    window.addEventListener("DOMContentLoaded",()=>{
+      sigPlaceholder.textContent = "";
+      sigPlaceholder.classList.remove("signed");
+      sigPlaceholder.style.fontFamily = "'Sacramento', cursive";
+      sigPlaceholder.style.setProperty('--sig-font-size','1.6em');
+      sigMatricula.value = "";
+    });
+  </script>
+</body>
+</html>
